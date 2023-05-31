@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 // React
 // CSS
 import styles from "./VideoPlayer.module.css";
-import { videoItem } from "../../Videos";
 // CSS
 
 type VideoPlayerProps = {
@@ -83,14 +82,16 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     return () => {
       _video.removeEventListener("play", drawFrame);
     };
-  }, []);
+  }, [videoSrc, video.className]);
 
   return (
     <div
       className={`${styles.videoPlayerContainer}  ${container.className}`}
       style={{ ...container.cssStyles }}
     >
-      <canvas ref={canvasEl} style={{ border: "1px solid magenta" }}></canvas>
+      <canvas ref={canvasEl} style={{ border: "1px solid magenta" }}>
+        xxxx
+      </canvas>
     </div>
   );
 };
