@@ -1,6 +1,11 @@
 * {
   border: none;
-  padding: none;
-  margin: none;
+  padding: 0;
+  margin: 0;
   outline: none;
+}
+
+.appContainer {
+  width: 100vw;
+  height: 100dvh;
 }/*# sourceMappingURL=index.css.map */

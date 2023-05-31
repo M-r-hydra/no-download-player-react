@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 // React
 // CSS
 import styles from "./VideoPlayer.module.css";
+import { videoItem } from "../../Videos";
 // CSS
 
 type VideoPlayerProps = {
@@ -28,34 +29,49 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     isMuted: boolean;
     currVolume: string | number;
     isPlaying: string | number;
-  }>();
+  }>({
+    videoMaxTime: "",
+    currVideoTime: "",
+    isMuted: false,
+    currVolume: "",
+    isPlaying: "",
+  });
   /**               */
   /**               */
   /**               */
   /**               */
   // videoEl
-  const videoEl = useRef<HTMLVideoElement>(null);
+
   // videoEl
   // canvasEl
   const canvasEl = useRef<HTMLCanvasElement>(null);
   // canvasEl
-  const x = React.createElement(
-    "video",
-    {
-      src: videoSrc,
-      className: video.className,
-      style: video.cssStyles,
-      ref: videoEl,
-    },
-    null
-  );
 
   useEffect(() => {
-    if (!canvasEl.current) return;
-    if (!videoEl.current) return;
-    const _video = videoEl.current;
-
+    if (!canvasEl.current) {
+      console.log(`canvasEl.current nooooo`);
+      return;
+    }
+    const videoEl = document.createElement("video");
+    videoEl.src = videoSrc;
+    videoEl.className += video.className;
+    setVideoData((prevState) => ({ ...prevState }));
+    if (!videoEl) {
+      console.log(`videoEl nooooo`);
+      return;
+    }
+    const _video = videoEl;
     const canvas = canvasEl.current;
+    canvas.onclick = () => {
+      _video
+        .play()
+        .then(() => {
+          console.log("video played");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
     // const div = divRef.current!;
     const ctx = canvas.getContext("2d")!;
     const drawFrame = () => {
@@ -74,7 +90,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
       className={`${styles.videoPlayerContainer}  ${container.className}`}
       style={{ ...container.cssStyles }}
     >
-      <canvas ref={canvasEl}></canvas>
+      <canvas ref={canvasEl} style={{ border: "1px solid magenta" }}></canvas>
     </div>
   );
 };
