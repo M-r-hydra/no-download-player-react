@@ -96,6 +96,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   }, [videoSrc, video.className, oriantaitinAngle]);
 
   useEffect(() => {
+    console.log(oriantaitinAngle);
     if (!_vid.current) {
       console.log("noVid !");
       return;
@@ -111,7 +112,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     return () => {
       clearTimeout(timeOut);
     };
-  }, [videoData]);
+  }, [videoData, oriantaitinAngle]);
 
   useEffect(() => {
     const oriantationChangehandler = (e: any) => {

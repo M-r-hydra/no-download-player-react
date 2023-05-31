@@ -14,15 +14,23 @@ const App = () => {
 
   useEffect(() => {
     const oriantationChangehandler = (e: any) => {
+      console.log(e.target.screen.orientation.angle);
+
       setWh({
-        h: window.innerHeight,
-        w: window.innerWidth,
+        h:
+          e.target.screen.orientation.angle === 0
+            ? window.innerHeight
+            : window.innerWidth,
+        w:
+          e.target.screen.orientation.angle === 0
+            ? window.innerWidth
+            : window.innerHeight,
       });
     };
-    window.addEventListener("change", oriantationChangehandler);
+    window.addEventListener("orientationchange", oriantationChangehandler);
 
     return () => {
-      window.removeEventListener("change", oriantationChangehandler);
+      window.removeEventListener("orientationchange", oriantationChangehandler);
     };
   }, []);
 
@@ -47,7 +55,7 @@ const App = () => {
         videoSrc={videoItem}
         canvas={{
           width: wh.w * 0.98,
-          height: 200,
+          height: 400,
         }}
       />
     </div>
