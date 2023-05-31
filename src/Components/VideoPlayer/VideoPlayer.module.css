@@ -1,1 +1,5 @@
-/*# sourceMappingURL=VideoPlayer.module.css.map */
+.videoPlayerContainer .controlCenter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}/*# sourceMappingURL=VideoPlayer.module.css.map */

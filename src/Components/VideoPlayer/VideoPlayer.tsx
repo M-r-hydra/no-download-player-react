@@ -15,57 +15,68 @@ type VideoPlayerProps = {
     cssStyles?: React.CSSProperties;
     className?: string;
   };
+  canvas: {
+    width: number;
+    height: number;
+  };
 };
 
 const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   videoSrc,
   container,
   video,
+  canvas,
 }) => {
   const [videoData, setVideoData] = useState<{
     videoMaxTime: string | number;
     currVideoTime: string | number;
     isMuted: boolean;
     currVolume: string | number;
-    isPlaying: string | number;
+    isPlaying: boolean;
   }>({
     videoMaxTime: "",
     currVideoTime: "",
     isMuted: false,
     currVolume: "",
-    isPlaying: "",
+    isPlaying: false,
   });
+  //
+  const [oriantaitinAngle, setoriantaitinAngle] = useState<number>(0);
   /**               */
   /**               */
   /**               */
   /**               */
   // videoEl
-
+  const _vid = useRef<any>();
   // videoEl
   // canvasEl
   const canvasEl = useRef<HTMLCanvasElement>(null);
   // canvasEl
-
   useEffect(() => {
+    console.log(oriantaitinAngle);
+    const videoEl = document.createElement("video");
+    _vid.current = videoEl;
     if (!canvasEl.current) {
       console.log(`canvasEl.current nooooo`);
       return;
     }
-    const videoEl = document.createElement("video");
     videoEl.src = videoSrc;
     videoEl.className += video.className;
+
     setVideoData((prevState) => ({ ...prevState }));
     if (!videoEl) {
       console.log(`videoEl nooooo`);
       return;
     }
     const _video = videoEl;
+    _video.controls = false;
     const canvas = canvasEl.current;
     canvas.onclick = () => {
       _video
         .play()
         .then(() => {
           console.log("video played");
+          setVideoData((prevState) => ({ ...prevState, isPlaying: true }));
         })
         .catch((err) => {
           console.log(err);
@@ -82,16 +93,52 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     return () => {
       _video.removeEventListener("play", drawFrame);
     };
-  }, [videoSrc, video.className]);
+  }, [videoSrc, video.className, oriantaitinAngle]);
+
+  useEffect(() => {
+    if (!_vid.current) {
+      console.log("noVid !");
+      return;
+    }
+    if (videoData.isPlaying === false) return;
+    const timeOut = setTimeout(() => {
+      setVideoData((prevState) => ({
+        ...prevState,
+        currVideoTime: Number(prevState.currVideoTime) + 1,
+      }));
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [videoData]);
+
+  useEffect(() => {
+    const oriantationChangehandler = (e: any) => {
+      setoriantaitinAngle(e.target.screen.orientation.angle);
+    };
+    window.addEventListener("orientationchange", oriantationChangehandler);
+
+    return () => {
+      window.removeEventListener("orientationchange", oriantationChangehandler);
+    };
+  }, []);
 
   return (
     <div
       className={`${styles.videoPlayerContainer}  ${container.className}`}
       style={{ ...container.cssStyles }}
     >
-      <canvas ref={canvasEl} style={{ border: "1px solid magenta" }}>
-        xxxx
-      </canvas>
+      <canvas
+        className={`${styles.canvasItem}`}
+        ref={canvasEl}
+        style={{ border: "1px solid magenta" }}
+        width={canvas.width}
+        height={canvas.height}
+      ></canvas>
+      <div className={`${styles.controlCenter}`}>
+        {videoData.isPlaying ? <></> : <></>}
+      </div>
     </div>
   );
 };
